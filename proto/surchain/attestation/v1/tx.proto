@@ -1,0 +1,73 @@
+syntax = "proto3";
+package surchain.attestation.v1;
+
+import "amino/amino.proto";
+import "cosmos/msg/v1/msg.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "surchain/attestation/v1/params.proto";
+
+option go_package = "github.com/surprotocol/surchain/x/attestation/types";
+
+// Msg defines the Msg service.
+service Msg {
+  option (cosmos.msg.v1.service) = true;
+
+  // UpdateParams defines a (governance) operation for updating the module
+  // parameters. The authority defaults to the x/gov module account.
+  rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+
+  // SubmitAttestation submits a ZK-proven content attestation.
+  rpc SubmitAttestation(MsgSubmitAttestation) returns (MsgSubmitAttestationResponse);
+}
+
+// MsgUpdateParams is the Msg/UpdateParams request type.
+message MsgUpdateParams {
+  option (cosmos.msg.v1.signer) = "authority";
+  option (amino.name) = "surchain/x/attestation/MsgUpdateParams";
+
+  // authority is the address that controls the module (defaults to x/gov unless overwritten).
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+
+  // params defines the module parameters to update.
+  //
+  // NOTE: All parameters must be supplied.
+  Params params = 2 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+// MsgUpdateParamsResponse defines the response structure for executing a
+// MsgUpdateParams message.
+message MsgUpdateParamsResponse {}
+
+// MsgSubmitAttestation submits a ZK-proven content attestation.
+message MsgSubmitAttestation {
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator          = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string username         = 2;
+  bytes  content_hash     = 3;
+  bytes  nullifier        = 4;
+  bytes  commitment_root  = 5;
+  bytes  proof_bytes      = 6;
+
+  // Provenance class of the content. Empty or "human_keyboard" => a Sur Keyboard
+  // human-typing attestation backed by the Groth16 proof above. Other values
+  // ("device_authored", "ai_generated", "external_source", "imported") are
+  // device-signed DECLARATIONS — they do NOT assert human typing and are secured
+  // by the device signature below instead of the ZK proof.
+  string origin           = 7;
+  // Optional citation for "external_source" / "imported" (e.g. a URL, book, note).
+  string citation         = 8;
+  // Compressed secp256k1 device public key (must hash to the device id in
+  // `username`). Required for declaration origins; unused for human_keyboard.
+  bytes  device_pubkey    = 9;
+  // secp256k1 signature over SHA-256(content_hash || origin || citation || nullifier),
+  // proving the device made this declaration. Required for declaration origins.
+  bytes  device_signature = 10;
+}
+
+// MsgSubmitAttestationResponse defines the response for SubmitAttestation.
+message MsgSubmitAttestationResponse {}

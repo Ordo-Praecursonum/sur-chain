@@ -1,0 +1,68 @@
+syntax = "proto3";
+package surchain.identity.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "surchain/identity/v1/params.proto";
+
+option go_package = "github.com/surprotocol/surchain/x/identity/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Parameters queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/surprotocol/surchain/identity/v1/params";
+  }
+
+  // GetUserProfile queries a user profile by username.
+  rpc GetUserProfile(QueryGetUserProfileRequest) returns (QueryGetUserProfileResponse) {
+    option (google.api.http).get = "/surprotocol/surchain/identity/v1/profile/{username}";
+  }
+
+  // GetDeviceCommitment queries a device commitment for a user at a given index.
+  rpc GetDeviceCommitment(QueryGetDeviceCommitmentRequest) returns (QueryGetDeviceCommitmentResponse) {
+    option (google.api.http).get = "/surprotocol/surchain/identity/v1/device/{username}/{device_index}";
+  }
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+// QueryGetUserProfileRequest is the request type for GetUserProfile.
+message QueryGetUserProfileRequest {
+  string username = 1;
+}
+
+// QueryGetUserProfileResponse is the response type for GetUserProfile.
+message QueryGetUserProfileResponse {
+  string username          = 1;
+  bytes  control_key_hash  = 2;
+  int64  registered_at     = 3;
+  bytes  commitment_root   = 4;
+  uint64 device_count      = 5;
+  uint64 total_device_count = 6;
+}
+
+// QueryGetDeviceCommitmentRequest is the request type for GetDeviceCommitment.
+message QueryGetDeviceCommitmentRequest {
+  string username     = 1;
+  uint64 device_index = 2;
+}
+
+// QueryGetDeviceCommitmentResponse is the response type for GetDeviceCommitment.
+message QueryGetDeviceCommitmentResponse {
+  bytes commitment = 1;
+  int64 added_at   = 2;
+  bool  revoked    = 3;
+}

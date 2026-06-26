@@ -1,0 +1,26 @@
+syntax = "proto3";
+package surchain.identity.v1;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/surprotocol/surchain/x/identity/types";
+
+// UserProfile represents a registered identity on-chain.
+message UserProfile {
+  string username            = 1;
+  bytes  control_key_hash    = 2;
+  int64  registered_at       = 3;
+  bytes  commitment_root     = 4;
+  uint64 device_count        = 5;
+  uint64 total_device_count  = 6;
+}
+
+// DeviceCommitment represents a device commitment associated with a user.
+message DeviceCommitment {
+  string username   = 1;
+  uint64 index      = 2;
+  bytes  commitment = 3;
+  int64  added_at   = 4;
+  bool   revoked    = 5;
+  int64  revoked_at = 6;
+}

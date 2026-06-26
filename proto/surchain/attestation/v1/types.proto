@@ -1,0 +1,20 @@
+syntax = "proto3";
+package surchain.attestation.v1;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/surprotocol/surchain/x/attestation/types";
+
+// AttestationRecord represents a submitted ZK content attestation.
+message AttestationRecord {
+  string username        = 1;
+  bytes  content_hash    = 2;
+  bytes  nullifier       = 3;
+  bytes  commitment_root = 4;
+  int64  timestamp       = 5;
+  // Provenance class: "human_keyboard" (ZK-proven human typing) or a device-signed
+  // declaration ("device_authored", "ai_generated", "external_source", "imported").
+  string origin          = 6;
+  // Optional citation for declaration origins (URL, book, note).
+  string citation        = 7;
+}

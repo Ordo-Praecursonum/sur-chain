@@ -1,0 +1,14 @@
+syntax = "proto3";
+package surchain.attestation.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/surprotocol/surchain/x/attestation/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (amino.name) = "surchain/x/attestation/Params";
+  option (gogoproto.equal) = true;
+  
+}

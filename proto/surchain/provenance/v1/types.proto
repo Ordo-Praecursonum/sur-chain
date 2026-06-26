@@ -1,0 +1,25 @@
+syntax = "proto3";
+package surchain.provenance.v1;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/surprotocol/surchain/x/provenance/types";
+
+// PipelinePrincipal represents a registered pipeline operator.
+message PipelinePrincipal {
+  string principal_id   = 1;
+  string name           = 2;
+  bytes  pubkey         = 3;
+  string principal_type = 4;
+  int64  registered_at  = 5;
+}
+
+// ProvenanceNode represents a single transform in a content processing pipeline.
+message ProvenanceNode {
+  string node_id              = 1;
+  bytes  content_hash_in      = 2;
+  bytes  content_hash_out     = 3;
+  string transformation_type  = 4;
+  string principal_id         = 5;
+  int64  timestamp            = 6;
+}

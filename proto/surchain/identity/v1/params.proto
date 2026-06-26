@@ -1,0 +1,16 @@
+syntax = "proto3";
+package surchain.identity.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/surprotocol/surchain/x/identity/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (amino.name) = "surchain/x/identity/Params";
+  option (gogoproto.equal) = true;
+
+  // max_devices_per_user is the maximum number of active devices a user may have.
+  uint64 max_devices_per_user = 1;
+}

@@ -1,0 +1,135 @@
+syntax = "proto3";
+package surchain.attestation.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "surchain/attestation/v1/params.proto";
+
+option go_package = "github.com/surprotocol/surchain/x/attestation/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Parameters queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/surprotocol/surchain/attestation/v1/params";
+  }
+
+  // IsNullifierUsed checks whether a nullifier has been used before.
+  rpc IsNullifierUsed(QueryIsNullifierUsedRequest) returns (QueryIsNullifierUsedResponse) {
+    option (google.api.http).get = "/surprotocol/surchain/attestation/v1/nullifier/{nullifier}";
+  }
+
+  // GetAttestation retrieves an attestation by username and nullifier.
+  rpc GetAttestation(QueryGetAttestationRequest) returns (QueryGetAttestationResponse) {
+    option (google.api.http).get = "/surprotocol/surchain/attestation/v1/attestation/{username}/{nullifier}";
+  }
+
+  // VerifyContent checks the origin of a piece of content by its hash. Given
+  // SHA-256(content) (hex), it returns every accepted human-typing attestation
+  // bound to that content. This is the public provenance-verification endpoint:
+  // a match proves the text was typed by a human on a registered Sur device.
+  rpc VerifyContent(QueryVerifyContentRequest) returns (QueryVerifyContentResponse) {
+    option (google.api.http).get = "/surprotocol/surchain/attestation/v1/verify/{content_hash_hex}";
+  }
+
+  // AggregateRoot returns the keccak256 Merkle root over all accepted attestations
+  // (the value a relayer anchors on Ethereum), plus the leaf count and the chain
+  // height the snapshot reflects.
+  rpc AggregateRoot(QueryAggregateRootRequest) returns (QueryAggregateRootResponse) {
+    option (google.api.http).get = "/surprotocol/surchain/attestation/v1/aggregate-root";
+  }
+
+  // MerkleProof returns the inclusion proof for the attestation of a given content
+  // hash, against the current aggregate root — used to verify settlement on L1.
+  rpc MerkleProof(QueryMerkleProofRequest) returns (QueryMerkleProofResponse) {
+    option (google.api.http).get = "/surprotocol/surchain/attestation/v1/merkle-proof/{content_hash_hex}";
+  }
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+// QueryIsNullifierUsedRequest is the request for IsNullifierUsed.
+message QueryIsNullifierUsedRequest {
+  bytes nullifier = 1;
+}
+
+// QueryIsNullifierUsedResponse is the response for IsNullifierUsed.
+message QueryIsNullifierUsedResponse {
+  bool used = 1;
+}
+
+// QueryGetAttestationRequest is the request for GetAttestation.
+message QueryGetAttestationRequest {
+  string username  = 1;
+  bytes  nullifier = 2;
+}
+
+// QueryGetAttestationResponse is the response for GetAttestation.
+message QueryGetAttestationResponse {
+  string username     = 1;
+  bytes  content_hash = 2;
+  bytes  nullifier    = 3;
+  int64  timestamp    = 4;
+}
+
+// QueryVerifyContentRequest is the request for VerifyContent. content_hash_hex
+// is the hex-encoded SHA-256 of the content being checked.
+message QueryVerifyContentRequest {
+  string content_hash_hex = 1;
+}
+
+// AttestationMatch is one attestation bound to the queried content.
+message AttestationMatch {
+  string username        = 1;
+  bytes  nullifier       = 2;
+  bytes  commitment_root = 3;
+  int64  timestamp       = 4;
+  // Provenance class and optional citation (see AttestationRecord).
+  string origin          = 5;
+  string citation        = 6;
+}
+
+// QueryVerifyContentResponse is the response for VerifyContent. found is true
+// when at least one attestation exists for the content; attestations lists them
+// all (the same text can be attested by multiple users/sessions).
+message QueryVerifyContentResponse {
+  bool                      found        = 1;
+  bytes                     content_hash = 2;
+  repeated AttestationMatch attestations = 3;
+}
+
+// QueryAggregateRootRequest is the request for AggregateRoot.
+message QueryAggregateRootRequest {}
+
+// QueryAggregateRootResponse carries the keccak Merkle root over all accepted
+// attestations, the number of leaves, and the chain height it reflects.
+message QueryAggregateRootResponse {
+  bytes  root       = 1;
+  uint64 leaf_count = 2;
+  int64  height     = 3;
+}
+
+// QueryMerkleProofRequest is the request for MerkleProof (hex SHA-256 content hash).
+message QueryMerkleProofRequest {
+  string content_hash_hex = 1;
+}
+
+// QueryMerkleProofResponse carries an inclusion proof against the aggregate root.
+message QueryMerkleProofResponse {
+  bool           found = 1;
+  bytes          root  = 2;
+  bytes          leaf  = 3;
+  repeated bytes proof = 4;
+}

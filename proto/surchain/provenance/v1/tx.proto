@@ -1,0 +1,75 @@
+syntax = "proto3";
+package surchain.provenance.v1;
+
+import "amino/amino.proto";
+import "cosmos/msg/v1/msg.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "surchain/provenance/v1/params.proto";
+
+option go_package = "github.com/surprotocol/surchain/x/provenance/types";
+
+// Msg defines the Msg service.
+service Msg {
+  option (cosmos.msg.v1.service) = true;
+
+  // UpdateParams defines a (governance) operation for updating the module
+  // parameters. The authority defaults to the x/gov module account.
+  rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+
+  // RegisterPrincipal registers a new pipeline principal.
+  rpc RegisterPrincipal(MsgRegisterPrincipal) returns (MsgRegisterPrincipalResponse);
+
+  // SubmitProvenanceNode submits a provenance node linking input to output content.
+  rpc SubmitProvenanceNode(MsgSubmitProvenanceNode) returns (MsgSubmitProvenanceNodeResponse);
+}
+
+// MsgUpdateParams is the Msg/UpdateParams request type.
+message MsgUpdateParams {
+  option (cosmos.msg.v1.signer) = "authority";
+  option (amino.name) = "surchain/x/provenance/MsgUpdateParams";
+
+  // authority is the address that controls the module (defaults to x/gov unless overwritten).
+  string authority = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+
+  // params defines the module parameters to update.
+  //
+  // NOTE: All parameters must be supplied.
+  Params params = 2 [
+    (gogoproto.nullable) = false,
+    (amino.dont_omitempty) = true
+  ];
+}
+
+// MsgUpdateParamsResponse defines the response structure for executing a
+// MsgUpdateParams message.
+message MsgUpdateParamsResponse {}
+
+// MsgRegisterPrincipal registers a new pipeline principal.
+message MsgRegisterPrincipal {
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator        = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  string principal_id   = 2;
+  string name           = 3;
+  bytes  pubkey         = 4;
+  string principal_type = 5;
+}
+
+// MsgRegisterPrincipalResponse defines the response for RegisterPrincipal.
+message MsgRegisterPrincipalResponse {}
+
+// MsgSubmitProvenanceNode submits a provenance node.
+message MsgSubmitProvenanceNode {
+  option (cosmos.msg.v1.signer) = "creator";
+
+  string creator              = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+  bytes  content_hash_in      = 2;
+  bytes  content_hash_out     = 3;
+  string transformation_type  = 4;
+  string principal_id         = 5;
+  bytes  sig                  = 6;
+}
+
+// MsgSubmitProvenanceNodeResponse defines the response for SubmitProvenanceNode.
+message MsgSubmitProvenanceNodeResponse {}
