@@ -34,6 +34,15 @@ service Query {
     option (google.api.http).get = "/surprotocol/surchain/attestation/v1/verify/{content_hash_hex}";
   }
 
+  // VerifyContentBy answers the scoped question "did THIS identity attest THIS
+  // content?" — content_hash_hex is the hex SHA-256 of the content; identifier
+  // is a bech32 device id (surdev1…), agent id (surai1…), or a hex-encoded
+  // 33-byte compressed secp256k1 public key (from which the device id is
+  // derived). Returns only attestations for that content made by that identity.
+  rpc VerifyContentBy(QueryVerifyContentByRequest) returns (QueryVerifyContentByResponse) {
+    option (google.api.http).get = "/surprotocol/surchain/attestation/v1/verify/{content_hash_hex}/{identifier}";
+  }
+
   // AggregateRoot returns the keccak256 Merkle root over all accepted attestations
   // (the value a relayer anchors on Ethereum), plus the leaf count and the chain
   // height the snapshot reflects.
@@ -108,6 +117,24 @@ message QueryVerifyContentResponse {
   bool                      found        = 1;
   bytes                     content_hash = 2;
   repeated AttestationMatch attestations = 3;
+}
+
+// QueryVerifyContentByRequest is the request for VerifyContentBy.
+// content_hash_hex is the hex SHA-256 of the content; identifier is a bech32
+// surdev1…/surai1… id or a hex 33-byte compressed secp256k1 public key.
+message QueryVerifyContentByRequest {
+  string content_hash_hex = 1;
+  string identifier       = 2;
+}
+
+// QueryVerifyContentByResponse is the response for VerifyContentBy. found is
+// true when the named identity has at least one attestation for the content.
+// identifier echoes the resolved bech32 id (derived when a pubkey was given).
+message QueryVerifyContentByResponse {
+  bool                      found        = 1;
+  bytes                     content_hash = 2;
+  string                    identifier   = 3;
+  repeated AttestationMatch attestations = 4;
 }
 
 // QueryAggregateRootRequest is the request for AggregateRoot.

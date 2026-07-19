@@ -3,16 +3,50 @@ package keeper
 import (
 	"context"
 	"encoding/hex"
+	"fmt"
 	"strings"
 
 	"cosmossdk.io/collections"
 	errorsmod "cosmossdk.io/errors"
+	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/bech32"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
 	"github.com/surprotocol/surchain/x/attestation/types"
 )
+
+// resolveIdentifier normalizes a caller-supplied identity into the identifier
+// string attestations are stored under. A hex-encoded 33-byte compressed
+// secp256k1 public key (with or without 0x) is converted to the device id via
+// the same derivation used at submission time (bech32(surdev,
+// ripemd160(sha256(pubkey)))); anything else — surdev1…/surai1… ids and legacy
+// plain usernames alike — is matched literally. Junk identifiers therefore
+// yield found=false rather than an error; only an empty identifier errors.
+func resolveIdentifier(raw string) (string, error) {
+	id := strings.TrimSpace(raw)
+	if id == "" {
+		return "", fmt.Errorf("identifier is required")
+	}
+
+	// A 66-char hex string is unambiguously a compressed pubkey — stored
+	// identifiers are capped at 64 chars by the register regex, so no stored
+	// identifier can collide with this form.
+	keyHex := strings.TrimPrefix(strings.ToLower(id), "0x")
+	if len(keyHex) == 66 {
+		if keyBytes, err := hex.DecodeString(keyHex); err == nil {
+			pub := &secp256k1.PubKey{Key: keyBytes}
+			derived, err := bech32.ConvertAndEncode(deviceIDHRP, pub.Address().Bytes())
+			if err != nil {
+				return "", fmt.Errorf("failed to derive device id from pubkey: %w", err)
+			}
+			return derived, nil
+		}
+	}
+
+	return id, nil
+}
 
 func (q queryServer) IsNullifierUsed(ctx context.Context, req *types.QueryIsNullifierUsedRequest) (*types.QueryIsNullifierUsedResponse, error) {
 	if req == nil {
@@ -80,6 +114,58 @@ func (q queryServer) VerifyContent(ctx context.Context, req *types.QueryVerifyCo
 	// Scan every (content_hash, nullifier) pair sharing this content hash prefix.
 	rng := collections.NewPrefixedPairRange[[]byte, []byte](contentHash)
 	err = q.k.ContentIndex.Walk(ctx, rng, func(_ collections.Pair[[]byte, []byte], record types.AttestationRecord) (bool, error) {
+		resp.Attestations = append(resp.Attestations, &types.AttestationMatch{
+			Username:       record.Username,
+			Nullifier:      record.Nullifier,
+			CommitmentRoot: record.CommitmentRoot,
+			Timestamp:      record.Timestamp,
+			Origin:         record.Origin,
+			Citation:       record.Citation,
+		})
+		return false, nil
+	})
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	resp.Found = len(resp.Attestations) > 0
+	return resp, nil
+}
+
+// VerifyContentBy answers "did THIS identity attest THIS content?" — the scoped
+// variant of VerifyContent. identifier may be a bech32 surdev1…/surai1… id or a
+// hex-encoded 33-byte compressed secp256k1 public key (the id is derived from
+// it, exactly as verifyDeclaration does for submissions).
+func (q queryServer) VerifyContentBy(ctx context.Context, req *types.QueryVerifyContentByRequest) (*types.QueryVerifyContentByResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+
+	hexStr := strings.TrimSpace(strings.TrimPrefix(strings.ToLower(req.ContentHashHex), "0x"))
+	contentHash, err := hex.DecodeString(hexStr)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, "content_hash_hex must be hex-encoded")
+	}
+	if len(contentHash) != 32 {
+		return nil, status.Error(codes.InvalidArgument, "content hash must be 32 bytes (SHA-256)")
+	}
+
+	identifier, err := resolveIdentifier(req.Identifier)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+
+	resp := &types.QueryVerifyContentByResponse{
+		ContentHash:  contentHash,
+		Identifier:   identifier,
+		Attestations: []*types.AttestationMatch{},
+	}
+
+	rng := collections.NewPrefixedPairRange[[]byte, []byte](contentHash)
+	err = q.k.ContentIndex.Walk(ctx, rng, func(_ collections.Pair[[]byte, []byte], record types.AttestationRecord) (bool, error) {
+		if record.Username != identifier {
+			return false, nil
+		}
 		resp.Attestations = append(resp.Attestations, &types.AttestationMatch{
 			Username:       record.Username,
 			Nullifier:      record.Nullifier,
