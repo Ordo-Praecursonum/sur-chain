@@ -54,6 +54,9 @@ message MsgRegisterPrincipal {
   string name           = 3;
   bytes  pubkey         = 4;
   string principal_type = 5;
+  // Optional origin domain this principal claims (see PipelinePrincipal.domain
+  // for the off-chain /.well-known verification flow).
+  string domain         = 6;
 }
 
 // MsgRegisterPrincipalResponse defines the response for RegisterPrincipal.

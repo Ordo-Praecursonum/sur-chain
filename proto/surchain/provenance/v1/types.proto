@@ -5,16 +5,29 @@ import "gogoproto/gogo.proto";
 
 option go_package = "github.com/surprotocol/surchain/x/provenance/types";
 
-// PipelinePrincipal represents a registered pipeline operator.
+// PipelinePrincipal represents a registered pipeline operator — a platform,
+// service, or AI agent that transforms content and signs provenance nodes.
 message PipelinePrincipal {
   string principal_id   = 1;
   string name           = 2;
   bytes  pubkey         = 3;
   string principal_type = 4;
   int64  registered_at  = 5;
+  // Optional origin domain claimed by this principal (e.g. "api.example.com").
+  // The chain binds the CLAIM (it is part of the registered record the
+  // principal's node signatures resolve to); proving actual domain ownership
+  // happens off-chain: verifiers fetch
+  // https://<domain>/.well-known/sur-principal.json and check that this
+  // principal's id and public key are listed there. A consensus network cannot
+  // fetch URLs deterministically, so on-chain verification of ownership is
+  // intentionally out of scope.
+  string domain         = 6;
 }
 
-// ProvenanceNode represents a single transform in a content processing pipeline.
+// ProvenanceNode represents a single transform in a content processing
+// pipeline: one directed edge of the provenance graph, from the content that
+// went in to the content that came out (e.g. an AI grammar pass over a text,
+// a human edit, a crop of an image).
 message ProvenanceNode {
   string node_id              = 1;
   bytes  content_hash_in      = 2;

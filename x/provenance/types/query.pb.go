@@ -114,9 +114,324 @@ func (m *QueryParamsResponse) GetParams() Params {
 	return Params{}
 }
 
+// QueryPrincipalRequest is the request for Principal.
+type QueryPrincipalRequest struct {
+	PrincipalId string `protobuf:"bytes,1,opt,name=principal_id,json=principalId,proto3" json:"principal_id,omitempty"`
+}
+
+func (m *QueryPrincipalRequest) Reset()         { *m = QueryPrincipalRequest{} }
+func (m *QueryPrincipalRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryPrincipalRequest) ProtoMessage()    {}
+func (*QueryPrincipalRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_46507fb9d00b8738, []int{2}
+}
+func (m *QueryPrincipalRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryPrincipalRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryPrincipalRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryPrincipalRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryPrincipalRequest.Merge(m, src)
+}
+func (m *QueryPrincipalRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryPrincipalRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryPrincipalRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryPrincipalRequest proto.InternalMessageInfo
+
+func (m *QueryPrincipalRequest) GetPrincipalId() string {
+	if m != nil {
+		return m.PrincipalId
+	}
+	return ""
+}
+
+// QueryPrincipalResponse is the response for Principal.
+type QueryPrincipalResponse struct {
+	Principal PipelinePrincipal `protobuf:"bytes,1,opt,name=principal,proto3" json:"principal"`
+}
+
+func (m *QueryPrincipalResponse) Reset()         { *m = QueryPrincipalResponse{} }
+func (m *QueryPrincipalResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryPrincipalResponse) ProtoMessage()    {}
+func (*QueryPrincipalResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_46507fb9d00b8738, []int{3}
+}
+func (m *QueryPrincipalResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryPrincipalResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryPrincipalResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryPrincipalResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryPrincipalResponse.Merge(m, src)
+}
+func (m *QueryPrincipalResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryPrincipalResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryPrincipalResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryPrincipalResponse proto.InternalMessageInfo
+
+func (m *QueryPrincipalResponse) GetPrincipal() PipelinePrincipal {
+	if m != nil {
+		return m.Principal
+	}
+	return PipelinePrincipal{}
+}
+
+// QueryNodesByContentRequest is the request for NodesByContent.
+// content_hash_hex is the hex-encoded 32-byte content hash.
+type QueryNodesByContentRequest struct {
+	ContentHashHex string `protobuf:"bytes,1,opt,name=content_hash_hex,json=contentHashHex,proto3" json:"content_hash_hex,omitempty"`
+}
+
+func (m *QueryNodesByContentRequest) Reset()         { *m = QueryNodesByContentRequest{} }
+func (m *QueryNodesByContentRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryNodesByContentRequest) ProtoMessage()    {}
+func (*QueryNodesByContentRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_46507fb9d00b8738, []int{4}
+}
+func (m *QueryNodesByContentRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryNodesByContentRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryNodesByContentRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryNodesByContentRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryNodesByContentRequest.Merge(m, src)
+}
+func (m *QueryNodesByContentRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryNodesByContentRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryNodesByContentRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryNodesByContentRequest proto.InternalMessageInfo
+
+func (m *QueryNodesByContentRequest) GetContentHashHex() string {
+	if m != nil {
+		return m.ContentHashHex
+	}
+	return ""
+}
+
+// QueryNodesByContentResponse lists every edge touching the content hash.
+type QueryNodesByContentResponse struct {
+	// Edges where this content was the input (derivations made FROM it).
+	AsInput []*ProvenanceNode `protobuf:"bytes,1,rep,name=as_input,json=asInput,proto3" json:"as_input,omitempty"`
+	// Edges where this content was the output (what it was derived from).
+	AsOutput []*ProvenanceNode `protobuf:"bytes,2,rep,name=as_output,json=asOutput,proto3" json:"as_output,omitempty"`
+}
+
+func (m *QueryNodesByContentResponse) Reset()         { *m = QueryNodesByContentResponse{} }
+func (m *QueryNodesByContentResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryNodesByContentResponse) ProtoMessage()    {}
+func (*QueryNodesByContentResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_46507fb9d00b8738, []int{5}
+}
+func (m *QueryNodesByContentResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryNodesByContentResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryNodesByContentResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryNodesByContentResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryNodesByContentResponse.Merge(m, src)
+}
+func (m *QueryNodesByContentResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryNodesByContentResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryNodesByContentResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryNodesByContentResponse proto.InternalMessageInfo
+
+func (m *QueryNodesByContentResponse) GetAsInput() []*ProvenanceNode {
+	if m != nil {
+		return m.AsInput
+	}
+	return nil
+}
+
+func (m *QueryNodesByContentResponse) GetAsOutput() []*ProvenanceNode {
+	if m != nil {
+		return m.AsOutput
+	}
+	return nil
+}
+
+// QueryLineageRequest is the request for Lineage. max_depth caps the walk in
+// each direction (default and maximum: 16).
+type QueryLineageRequest struct {
+	ContentHashHex string `protobuf:"bytes,1,opt,name=content_hash_hex,json=contentHashHex,proto3" json:"content_hash_hex,omitempty"`
+	MaxDepth       uint32 `protobuf:"varint,2,opt,name=max_depth,json=maxDepth,proto3" json:"max_depth,omitempty"`
+}
+
+func (m *QueryLineageRequest) Reset()         { *m = QueryLineageRequest{} }
+func (m *QueryLineageRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryLineageRequest) ProtoMessage()    {}
+func (*QueryLineageRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_46507fb9d00b8738, []int{6}
+}
+func (m *QueryLineageRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryLineageRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryLineageRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryLineageRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryLineageRequest.Merge(m, src)
+}
+func (m *QueryLineageRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryLineageRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryLineageRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryLineageRequest proto.InternalMessageInfo
+
+func (m *QueryLineageRequest) GetContentHashHex() string {
+	if m != nil {
+		return m.ContentHashHex
+	}
+	return ""
+}
+
+func (m *QueryLineageRequest) GetMaxDepth() uint32 {
+	if m != nil {
+		return m.MaxDepth
+	}
+	return 0
+}
+
+// QueryLineageResponse is the provenance subgraph reachable from the queried
+// content hash: ancestor edges (transformations that led to it) and
+// descendant edges (transformations applied to it or its derivatives).
+type QueryLineageResponse struct {
+	Ancestors   []*ProvenanceNode `protobuf:"bytes,1,rep,name=ancestors,proto3" json:"ancestors,omitempty"`
+	Descendants []*ProvenanceNode `protobuf:"bytes,2,rep,name=descendants,proto3" json:"descendants,omitempty"`
+	// True if a depth or size cap stopped the walk before it was exhausted.
+	Truncated bool `protobuf:"varint,3,opt,name=truncated,proto3" json:"truncated,omitempty"`
+}
+
+func (m *QueryLineageResponse) Reset()         { *m = QueryLineageResponse{} }
+func (m *QueryLineageResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryLineageResponse) ProtoMessage()    {}
+func (*QueryLineageResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_46507fb9d00b8738, []int{7}
+}
+func (m *QueryLineageResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *QueryLineageResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_QueryLineageResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *QueryLineageResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryLineageResponse.Merge(m, src)
+}
+func (m *QueryLineageResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *QueryLineageResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryLineageResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QueryLineageResponse proto.InternalMessageInfo
+
+func (m *QueryLineageResponse) GetAncestors() []*ProvenanceNode {
+	if m != nil {
+		return m.Ancestors
+	}
+	return nil
+}
+
+func (m *QueryLineageResponse) GetDescendants() []*ProvenanceNode {
+	if m != nil {
+		return m.Descendants
+	}
+	return nil
+}
+
+func (m *QueryLineageResponse) GetTruncated() bool {
+	if m != nil {
+		return m.Truncated
+	}
+	return false
+}
+
 func init() {
 	proto.RegisterType((*QueryParamsRequest)(nil), "surchain.provenance.v1.QueryParamsRequest")
 	proto.RegisterType((*QueryParamsResponse)(nil), "surchain.provenance.v1.QueryParamsResponse")
+	proto.RegisterType((*QueryPrincipalRequest)(nil), "surchain.provenance.v1.QueryPrincipalRequest")
+	proto.RegisterType((*QueryPrincipalResponse)(nil), "surchain.provenance.v1.QueryPrincipalResponse")
+	proto.RegisterType((*QueryNodesByContentRequest)(nil), "surchain.provenance.v1.QueryNodesByContentRequest")
+	proto.RegisterType((*QueryNodesByContentResponse)(nil), "surchain.provenance.v1.QueryNodesByContentResponse")
+	proto.RegisterType((*QueryLineageRequest)(nil), "surchain.provenance.v1.QueryLineageRequest")
+	proto.RegisterType((*QueryLineageResponse)(nil), "surchain.provenance.v1.QueryLineageResponse")
 }
 
 func init() {
@@ -124,28 +439,51 @@ func init() {
 }
 
 var fileDescriptor_46507fb9d00b8738 = []byte{
-	// 326 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x90, 0x31, 0x4b, 0xc3, 0x40,
-	0x14, 0xc7, 0x73, 0x82, 0x05, 0xe3, 0x64, 0x2c, 0x22, 0x45, 0x4e, 0x89, 0x8b, 0x44, 0xc9, 0x23,
-	0xf1, 0x13, 0xd8, 0xd9, 0x41, 0x3b, 0x89, 0xdb, 0x25, 0x1c, 0x69, 0xa0, 0xb9, 0x77, 0xcd, 0x5d,
-	0x82, 0x5d, 0xfd, 0x04, 0x82, 0x38, 0xbb, 0x3a, 0xfa, 0x31, 0x3a, 0x16, 0x5c, 0x9c, 0x44, 0x5a,
-	0xc1, 0xaf, 0x21, 0xbd, 0x8b, 0xa8, 0xd8, 0x8a, 0xcb, 0xf1, 0x78, 0xf7, 0x7b, 0xbf, 0xfb, 0xbf,
-	0x73, 0x7d, 0x55, 0x95, 0x69, 0x9f, 0xe5, 0x02, 0x64, 0x89, 0x35, 0x17, 0x4c, 0xa4, 0x1c, 0xea,
-	0x08, 0x86, 0x15, 0x2f, 0x47, 0xa1, 0x2c, 0x51, 0xa3, 0xb7, 0xf5, 0xc9, 0x84, 0x5f, 0x4c, 0x58,
-	0x47, 0x9d, 0x0d, 0x56, 0xe4, 0x02, 0xc1, 0x9c, 0x16, 0xed, 0xb4, 0x33, 0xcc, 0xd0, 0x94, 0x30,
-	0xaf, 0x9a, 0xee, 0x4e, 0x86, 0x98, 0x0d, 0x38, 0x30, 0x99, 0x03, 0x13, 0x02, 0x35, 0xd3, 0x39,
-	0x0a, 0xd5, 0xdc, 0x06, 0x29, 0xaa, 0x02, 0x15, 0x24, 0x4c, 0x71, 0xfb, 0x2e, 0xd4, 0x51, 0xc2,
-	0x35, 0x8b, 0x40, 0xb2, 0x2c, 0x17, 0x06, 0x6e, 0xd8, 0xfd, 0x25, 0x71, 0x25, 0x2b, 0x59, 0xd1,
-	0x08, 0xfd, 0xb6, 0xeb, 0x9d, 0xcf, 0x35, 0x67, 0xa6, 0xd9, 0xe3, 0xc3, 0x8a, 0x2b, 0xed, 0x5f,
-	0xb8, 0x9b, 0x3f, 0xba, 0x4a, 0xa2, 0x50, 0xdc, 0x3b, 0x71, 0x5b, 0x76, 0x78, 0x9b, 0xec, 0x91,
-	0x83, 0xf5, 0x98, 0x86, 0x8b, 0xb7, 0x0d, 0xed, 0x5c, 0x77, 0x6d, 0xfc, 0xb2, 0xeb, 0x3c, 0xbc,
-	0x3f, 0x06, 0xa4, 0xd7, 0x0c, 0xc6, 0xf7, 0xc4, 0x5d, 0x35, 0x6a, 0xef, 0x8e, 0xb8, 0x2d, 0xcb,
-	0x79, 0xc1, 0x32, 0xcf, 0xef, 0x68, 0x9d, 0xc3, 0x7f, 0xb1, 0x36, 0xb0, 0x1f, 0x5f, 0x3f, 0xbd,
-	0xdd, 0xae, 0x1c, 0x79, 0x01, 0xa8, 0xaa, 0x34, 0x0b, 0xa7, 0x38, 0x80, 0x3f, 0xff, 0xa5, 0x7b,
-	0x3a, 0x9e, 0x52, 0x32, 0x99, 0x52, 0xf2, 0x3a, 0xa5, 0xe4, 0x66, 0x46, 0x9d, 0xc9, 0x8c, 0x3a,
-	0xcf, 0x33, 0xea, 0x5c, 0xc6, 0x59, 0xae, 0xfb, 0x55, 0x12, 0xa6, 0x58, 0x2c, 0xf6, 0x5d, 0x7d,
-	0x37, 0xea, 0x91, 0xe4, 0x2a, 0x69, 0x19, 0xea, 0xf8, 0x23, 0x00, 0x00, 0xff, 0xff, 0xa7, 0xb4,
-	0x74, 0xac, 0x3c, 0x02, 0x00, 0x00,
+	// 691 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x55, 0xcf, 0x6a, 0x13, 0x4f,
+	0x1c, 0xcf, 0xb4, 0xbf, 0xb6, 0xd9, 0xc9, 0xcf, 0xa2, 0x63, 0x2d, 0x21, 0x2d, 0x6b, 0x5c, 0x41,
+	0x62, 0xac, 0x3b, 0x24, 0xbd, 0x89, 0x14, 0x4d, 0x4b, 0x69, 0xa1, 0xfe, 0xdb, 0x93, 0x88, 0x10,
+	0x26, 0xbb, 0xc3, 0xee, 0x42, 0x32, 0xb3, 0xdd, 0x99, 0x0d, 0x29, 0xa5, 0x17, 0x9f, 0x40, 0x10,
+	0x1f, 0x41, 0xf0, 0xe0, 0xa1, 0x6f, 0xe0, 0x41, 0x0f, 0x3d, 0x16, 0xbc, 0x78, 0x12, 0x69, 0x05,
+	0x5f, 0x43, 0x76, 0x77, 0x92, 0x34, 0x35, 0x09, 0x89, 0x97, 0xb2, 0xfb, 0xed, 0xe7, 0xdf, 0x77,
+	0x76, 0x3e, 0x04, 0x1a, 0x22, 0x0a, 0x6d, 0x8f, 0xf8, 0x0c, 0x07, 0x21, 0x6f, 0x53, 0x46, 0x98,
+	0x4d, 0x71, 0xbb, 0x82, 0xf7, 0x23, 0x1a, 0x1e, 0x98, 0x41, 0xc8, 0x25, 0x47, 0xcb, 0x5d, 0x8c,
+	0xd9, 0xc7, 0x98, 0xed, 0x4a, 0xe1, 0x1a, 0x69, 0xf9, 0x8c, 0xe3, 0xe4, 0x6f, 0x0a, 0x2d, 0x2c,
+	0xb9, 0xdc, 0xe5, 0xc9, 0x23, 0x8e, 0x9f, 0xd4, 0x74, 0xd5, 0xe5, 0xdc, 0x6d, 0x52, 0x4c, 0x02,
+	0x1f, 0x13, 0xc6, 0xb8, 0x24, 0xd2, 0xe7, 0x4c, 0xa8, 0xff, 0x96, 0x6d, 0x2e, 0x5a, 0x5c, 0xe0,
+	0x06, 0x11, 0x34, 0xf5, 0xc5, 0xed, 0x4a, 0x83, 0x4a, 0x52, 0xc1, 0x01, 0x71, 0x7d, 0x96, 0x80,
+	0x15, 0xf6, 0xf6, 0x88, 0xb8, 0x01, 0x09, 0x49, 0xab, 0x2b, 0x38, 0x6a, 0x27, 0x79, 0x10, 0x50,
+	0x85, 0x31, 0x96, 0x20, 0x7a, 0x11, 0x5b, 0x3d, 0x4f, 0x88, 0x16, 0xdd, 0x8f, 0xa8, 0x90, 0xc6,
+	0x4b, 0x78, 0x7d, 0x60, 0x2a, 0x02, 0xce, 0x04, 0x45, 0x8f, 0xe1, 0x7c, 0x6a, 0x90, 0x07, 0x45,
+	0x50, 0xca, 0x55, 0x75, 0x73, 0xf8, 0x89, 0x98, 0x29, 0xaf, 0xa6, 0x9d, 0xfc, 0xb8, 0x99, 0xf9,
+	0xf8, 0xfb, 0xb8, 0x0c, 0x2c, 0x45, 0x34, 0x1e, 0xc0, 0x1b, 0xa9, 0x72, 0xe8, 0x33, 0xdb, 0x0f,
+	0x48, 0x53, 0x59, 0xa2, 0x5b, 0xf0, 0xff, 0xa0, 0x3b, 0xab, 0xfb, 0x4e, 0xe2, 0xa0, 0x59, 0xb9,
+	0xde, 0x6c, 0xd7, 0x31, 0x5c, 0xb8, 0x7c, 0x99, 0xab, 0x82, 0x3d, 0x81, 0x5a, 0x0f, 0xa8, 0xb2,
+	0xdd, 0x1d, 0x99, 0xcd, 0x0f, 0x68, 0xd3, 0x67, 0xb4, 0xa7, 0x52, 0xfb, 0x2f, 0x8e, 0x69, 0xf5,
+	0x15, 0x8c, 0x6d, 0x58, 0x48, 0x8c, 0x9e, 0x72, 0x87, 0x8a, 0xda, 0xc1, 0x26, 0x67, 0x92, 0x32,
+	0xd9, 0x4d, 0x5a, 0x82, 0x57, 0xed, 0x74, 0x52, 0xf7, 0x88, 0xf0, 0xea, 0x1e, 0xed, 0xa8, 0xb4,
+	0x8b, 0x6a, 0xbe, 0x43, 0x84, 0xb7, 0x43, 0x3b, 0xc6, 0x07, 0x00, 0x57, 0x86, 0x0a, 0xf5, 0xce,
+	0x33, 0x4b, 0x44, 0xdd, 0x67, 0x41, 0x24, 0xf3, 0xa0, 0x38, 0x5b, 0xca, 0x55, 0xef, 0x8c, 0x4c,
+	0xdd, 0x7b, 0x8b, 0xb5, 0xac, 0x05, 0x22, 0x76, 0x63, 0x1a, 0xda, 0x84, 0x1a, 0x11, 0x75, 0x1e,
+	0xc9, 0x58, 0x63, 0x66, 0x2a, 0x8d, 0x2c, 0x11, 0xcf, 0x12, 0x9e, 0xf1, 0x5a, 0x7d, 0xee, 0x3d,
+	0x9f, 0x51, 0xe2, 0xd2, 0xa9, 0x17, 0x45, 0x2b, 0x50, 0x6b, 0x91, 0x4e, 0xdd, 0xa1, 0x81, 0xf4,
+	0xf2, 0x33, 0x45, 0x50, 0xba, 0x62, 0x65, 0x5b, 0xa4, 0xb3, 0x15, 0xbf, 0x1b, 0x5f, 0x01, 0x5c,
+	0x1a, 0x94, 0x57, 0xeb, 0x6f, 0x41, 0x2d, 0x0e, 0x23, 0x24, 0x0f, 0xc5, 0x94, 0xfb, 0xf7, 0x89,
+	0x68, 0x07, 0xe6, 0x1c, 0x2a, 0x6c, 0xca, 0x1c, 0xc2, 0xa4, 0x98, 0xf2, 0x0c, 0x2e, 0x52, 0xd1,
+	0x2a, 0xd4, 0x64, 0x18, 0x31, 0x9b, 0x48, 0xea, 0xe4, 0x67, 0x8b, 0xa0, 0x94, 0xb5, 0xfa, 0x83,
+	0xea, 0x97, 0x39, 0x38, 0x97, 0xac, 0x81, 0xde, 0x03, 0x38, 0x9f, 0xde, 0x70, 0x54, 0x1e, 0xe5,
+	0xf3, 0x77, 0xa9, 0x0a, 0xf7, 0x26, 0xc2, 0xa6, 0x67, 0x63, 0x54, 0xdf, 0x7c, 0xfb, 0xf5, 0x6e,
+	0x66, 0x0d, 0x95, 0xb1, 0x88, 0xc2, 0xa4, 0xaa, 0x36, 0x6f, 0xe2, 0xb1, 0xad, 0x47, 0xc7, 0x00,
+	0x6a, 0xbd, 0x5b, 0x8d, 0xee, 0x8f, 0xb7, 0xbb, 0xd4, 0xbf, 0x82, 0x39, 0x29, 0x5c, 0x05, 0xdc,
+	0x4a, 0x02, 0x6e, 0xa0, 0x87, 0x13, 0x05, 0xec, 0xd2, 0xf1, 0xe1, 0xc5, 0x92, 0x1f, 0xa1, 0xcf,
+	0x00, 0x2e, 0x0e, 0x96, 0x03, 0x55, 0xc7, 0x06, 0x19, 0x5a, 0xc9, 0xc2, 0xfa, 0x54, 0x9c, 0x7f,
+	0xd9, 0x80, 0xc5, 0x1a, 0xf8, 0xf0, 0x72, 0x1f, 0x8e, 0xd0, 0x27, 0x00, 0x17, 0xd4, 0xc5, 0x46,
+	0xe3, 0xbf, 0xf0, 0x60, 0xbb, 0x0a, 0x6b, 0x93, 0x81, 0x55, 0xd8, 0xed, 0x24, 0xec, 0x23, 0xb4,
+	0x31, 0x49, 0xd8, 0x66, 0x4a, 0x1e, 0x12, 0xb7, 0xb6, 0x77, 0x72, 0xa6, 0x83, 0xd3, 0x33, 0x1d,
+	0xfc, 0x3c, 0xd3, 0xc1, 0xdb, 0x73, 0x3d, 0x73, 0x7a, 0xae, 0x67, 0xbe, 0x9f, 0xeb, 0x99, 0x57,
+	0x55, 0xd7, 0x97, 0x5e, 0xd4, 0x30, 0x6d, 0xde, 0x1a, 0xee, 0xd1, 0xb9, 0xe8, 0x92, 0xfc, 0x86,
+	0x34, 0xe6, 0x13, 0xd4, 0xfa, 0x9f, 0x00, 0x00, 0x00, 0xff, 0xff, 0xc3, 0x59, 0x1a, 0x16, 0x3e,
+	0x07, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -162,6 +500,18 @@ const _ = grpc.SupportPackageIsVersion4
 type QueryClient interface {
 	// Parameters queries the parameters of the module.
 	Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error)
+	// Principal returns a registered pipeline principal by id — including its
+	// public key and claimed domain, which verifiers cross-check against
+	// https://<domain>/.well-known/sur-principal.json.
+	Principal(ctx context.Context, in *QueryPrincipalRequest, opts ...grpc.CallOption) (*QueryPrincipalResponse, error)
+	// NodesByContent returns every provenance edge that touches the given
+	// content hash: edges where it was the INPUT (things derived from it) and
+	// edges where it was the OUTPUT (things it was derived from).
+	NodesByContent(ctx context.Context, in *QueryNodesByContentRequest, opts ...grpc.CallOption) (*QueryNodesByContentResponse, error)
+	// Lineage walks the provenance graph from a content hash: ancestors (the
+	// chain of transformations that produced it) and descendants (everything
+	// later derived from it), up to max_depth hops in each direction.
+	Lineage(ctx context.Context, in *QueryLineageRequest, opts ...grpc.CallOption) (*QueryLineageResponse, error)
 }
 
 type queryClient struct {
@@ -181,10 +531,49 @@ func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts .
 	return out, nil
 }
 
+func (c *queryClient) Principal(ctx context.Context, in *QueryPrincipalRequest, opts ...grpc.CallOption) (*QueryPrincipalResponse, error) {
+	out := new(QueryPrincipalResponse)
+	err := c.cc.Invoke(ctx, "/surchain.provenance.v1.Query/Principal", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) NodesByContent(ctx context.Context, in *QueryNodesByContentRequest, opts ...grpc.CallOption) (*QueryNodesByContentResponse, error) {
+	out := new(QueryNodesByContentResponse)
+	err := c.cc.Invoke(ctx, "/surchain.provenance.v1.Query/NodesByContent", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *queryClient) Lineage(ctx context.Context, in *QueryLineageRequest, opts ...grpc.CallOption) (*QueryLineageResponse, error) {
+	out := new(QueryLineageResponse)
+	err := c.cc.Invoke(ctx, "/surchain.provenance.v1.Query/Lineage", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // QueryServer is the server API for Query service.
 type QueryServer interface {
 	// Parameters queries the parameters of the module.
 	Params(context.Context, *QueryParamsRequest) (*QueryParamsResponse, error)
+	// Principal returns a registered pipeline principal by id — including its
+	// public key and claimed domain, which verifiers cross-check against
+	// https://<domain>/.well-known/sur-principal.json.
+	Principal(context.Context, *QueryPrincipalRequest) (*QueryPrincipalResponse, error)
+	// NodesByContent returns every provenance edge that touches the given
+	// content hash: edges where it was the INPUT (things derived from it) and
+	// edges where it was the OUTPUT (things it was derived from).
+	NodesByContent(context.Context, *QueryNodesByContentRequest) (*QueryNodesByContentResponse, error)
+	// Lineage walks the provenance graph from a content hash: ancestors (the
+	// chain of transformations that produced it) and descendants (everything
+	// later derived from it), up to max_depth hops in each direction.
+	Lineage(context.Context, *QueryLineageRequest) (*QueryLineageResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
@@ -193,6 +582,15 @@ type UnimplementedQueryServer struct {
 
 func (*UnimplementedQueryServer) Params(ctx context.Context, req *QueryParamsRequest) (*QueryParamsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
+}
+func (*UnimplementedQueryServer) Principal(ctx context.Context, req *QueryPrincipalRequest) (*QueryPrincipalResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Principal not implemented")
+}
+func (*UnimplementedQueryServer) NodesByContent(ctx context.Context, req *QueryNodesByContentRequest) (*QueryNodesByContentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method NodesByContent not implemented")
+}
+func (*UnimplementedQueryServer) Lineage(ctx context.Context, req *QueryLineageRequest) (*QueryLineageResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Lineage not implemented")
 }
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
@@ -217,6 +615,60 @@ func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Query_Principal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryPrincipalRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Principal(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/surchain.provenance.v1.Query/Principal",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Principal(ctx, req.(*QueryPrincipalRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_NodesByContent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryNodesByContentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).NodesByContent(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/surchain.provenance.v1.Query/NodesByContent",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).NodesByContent(ctx, req.(*QueryNodesByContentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_Lineage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryLineageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).Lineage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/surchain.provenance.v1.Query/Lineage",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).Lineage(ctx, req.(*QueryLineageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var Query_serviceDesc = _Query_serviceDesc
 var _Query_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "surchain.provenance.v1.Query",
@@ -225,6 +677,18 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Params",
 			Handler:    _Query_Params_Handler,
+		},
+		{
+			MethodName: "Principal",
+			Handler:    _Query_Principal_Handler,
+		},
+		{
+			MethodName: "NodesByContent",
+			Handler:    _Query_NodesByContent_Handler,
+		},
+		{
+			MethodName: "Lineage",
+			Handler:    _Query_Lineage_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -287,6 +751,246 @@ func (m *QueryParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *QueryPrincipalRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryPrincipalRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryPrincipalRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.PrincipalId) > 0 {
+		i -= len(m.PrincipalId)
+		copy(dAtA[i:], m.PrincipalId)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.PrincipalId)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryPrincipalResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryPrincipalResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryPrincipalResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size, err := m.Principal.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintQuery(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryNodesByContentRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryNodesByContentRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryNodesByContentRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ContentHashHex) > 0 {
+		i -= len(m.ContentHashHex)
+		copy(dAtA[i:], m.ContentHashHex)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.ContentHashHex)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryNodesByContentResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryNodesByContentResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryNodesByContentResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.AsOutput) > 0 {
+		for iNdEx := len(m.AsOutput) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.AsOutput[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintQuery(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.AsInput) > 0 {
+		for iNdEx := len(m.AsInput) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.AsInput[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintQuery(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryLineageRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryLineageRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryLineageRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.MaxDepth != 0 {
+		i = encodeVarintQuery(dAtA, i, uint64(m.MaxDepth))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.ContentHashHex) > 0 {
+		i -= len(m.ContentHashHex)
+		copy(dAtA[i:], m.ContentHashHex)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.ContentHashHex)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *QueryLineageResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *QueryLineageResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *QueryLineageResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Truncated {
+		i--
+		if m.Truncated {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x18
+	}
+	if len(m.Descendants) > 0 {
+		for iNdEx := len(m.Descendants) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Descendants[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintQuery(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.Ancestors) > 0 {
+		for iNdEx := len(m.Ancestors) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Ancestors[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintQuery(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintQuery(dAtA []byte, offset int, v uint64) int {
 	offset -= sovQuery(v)
 	base := offset
@@ -315,6 +1019,104 @@ func (m *QueryParamsResponse) Size() (n int) {
 	_ = l
 	l = m.Params.Size()
 	n += 1 + l + sovQuery(uint64(l))
+	return n
+}
+
+func (m *QueryPrincipalRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.PrincipalId)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryPrincipalResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = m.Principal.Size()
+	n += 1 + l + sovQuery(uint64(l))
+	return n
+}
+
+func (m *QueryNodesByContentRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.ContentHashHex)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *QueryNodesByContentResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.AsInput) > 0 {
+		for _, e := range m.AsInput {
+			l = e.Size()
+			n += 1 + l + sovQuery(uint64(l))
+		}
+	}
+	if len(m.AsOutput) > 0 {
+		for _, e := range m.AsOutput {
+			l = e.Size()
+			n += 1 + l + sovQuery(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *QueryLineageRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.ContentHashHex)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	if m.MaxDepth != 0 {
+		n += 1 + sovQuery(uint64(m.MaxDepth))
+	}
+	return n
+}
+
+func (m *QueryLineageResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Ancestors) > 0 {
+		for _, e := range m.Ancestors {
+			l = e.Size()
+			n += 1 + l + sovQuery(uint64(l))
+		}
+	}
+	if len(m.Descendants) > 0 {
+		for _, e := range m.Descendants {
+			l = e.Size()
+			n += 1 + l + sovQuery(uint64(l))
+		}
+	}
+	if m.Truncated {
+		n += 2
+	}
 	return n
 }
 
@@ -436,6 +1238,610 @@ func (m *QueryParamsResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryPrincipalRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryPrincipalRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryPrincipalRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PrincipalId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PrincipalId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryPrincipalResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryPrincipalResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryPrincipalResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Principal", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Principal.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryNodesByContentRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryNodesByContentRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryNodesByContentRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ContentHashHex", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ContentHashHex = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryNodesByContentResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryNodesByContentResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryNodesByContentResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AsInput", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AsInput = append(m.AsInput, &ProvenanceNode{})
+			if err := m.AsInput[len(m.AsInput)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AsOutput", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AsOutput = append(m.AsOutput, &ProvenanceNode{})
+			if err := m.AsOutput[len(m.AsOutput)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryLineageRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryLineageRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryLineageRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ContentHashHex", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ContentHashHex = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxDepth", wireType)
+			}
+			m.MaxDepth = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.MaxDepth |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *QueryLineageResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: QueryLineageResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: QueryLineageResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ancestors", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Ancestors = append(m.Ancestors, &ProvenanceNode{})
+			if err := m.Ancestors[len(m.Ancestors)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Descendants", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Descendants = append(m.Descendants, &ProvenanceNode{})
+			if err := m.Descendants[len(m.Descendants)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Truncated", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Truncated = bool(v != 0)
 		default:
 			iNdEx = preIndex
 			skippy, err := skipQuery(dAtA[iNdEx:])

@@ -42,6 +42,7 @@ func (k msgServer) RegisterPrincipal(goCtx context.Context, msg *types.MsgRegist
 		Pubkey:        msg.Pubkey,
 		PrincipalType: msg.PrincipalType,
 		RegisteredAt:  ctx.BlockTime().Unix(),
+		Domain:        msg.Domain,
 	}
 	if err := k.Principals.Set(ctx, msg.PrincipalId, principal); err != nil {
 		return nil, errorsmod.Wrapf(err, "failed to store principal")

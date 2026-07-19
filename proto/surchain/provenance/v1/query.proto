@@ -6,6 +6,7 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "surchain/provenance/v1/params.proto";
+import "surchain/provenance/v1/types.proto";
 
 option go_package = "github.com/surprotocol/surchain/x/provenance/types";
 
@@ -14,6 +15,27 @@ service Query {
   // Parameters queries the parameters of the module.
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/surprotocol/surchain/provenance/v1/params";
+  }
+
+  // Principal returns a registered pipeline principal by id — including its
+  // public key and claimed domain, which verifiers cross-check against
+  // https://<domain>/.well-known/sur-principal.json.
+  rpc Principal(QueryPrincipalRequest) returns (QueryPrincipalResponse) {
+    option (google.api.http).get = "/surprotocol/surchain/provenance/v1/principal/{principal_id}";
+  }
+
+  // NodesByContent returns every provenance edge that touches the given
+  // content hash: edges where it was the INPUT (things derived from it) and
+  // edges where it was the OUTPUT (things it was derived from).
+  rpc NodesByContent(QueryNodesByContentRequest) returns (QueryNodesByContentResponse) {
+    option (google.api.http).get = "/surprotocol/surchain/provenance/v1/nodes/{content_hash_hex}";
+  }
+
+  // Lineage walks the provenance graph from a content hash: ancestors (the
+  // chain of transformations that produced it) and descendants (everything
+  // later derived from it), up to max_depth hops in each direction.
+  rpc Lineage(QueryLineageRequest) returns (QueryLineageResponse) {
+    option (google.api.http).get = "/surprotocol/surchain/provenance/v1/lineage/{content_hash_hex}";
   }
 }
 
@@ -27,4 +49,45 @@ message QueryParamsResponse {
     (gogoproto.nullable) = false,
     (amino.dont_omitempty) = true
   ];
+}
+
+// QueryPrincipalRequest is the request for Principal.
+message QueryPrincipalRequest {
+  string principal_id = 1;
+}
+
+// QueryPrincipalResponse is the response for Principal.
+message QueryPrincipalResponse {
+  PipelinePrincipal principal = 1 [(gogoproto.nullable) = false];
+}
+
+// QueryNodesByContentRequest is the request for NodesByContent.
+// content_hash_hex is the hex-encoded 32-byte content hash.
+message QueryNodesByContentRequest {
+  string content_hash_hex = 1;
+}
+
+// QueryNodesByContentResponse lists every edge touching the content hash.
+message QueryNodesByContentResponse {
+  // Edges where this content was the input (derivations made FROM it).
+  repeated ProvenanceNode as_input  = 1;
+  // Edges where this content was the output (what it was derived from).
+  repeated ProvenanceNode as_output = 2;
+}
+
+// QueryLineageRequest is the request for Lineage. max_depth caps the walk in
+// each direction (default and maximum: 16).
+message QueryLineageRequest {
+  string content_hash_hex = 1;
+  uint32 max_depth        = 2;
+}
+
+// QueryLineageResponse is the provenance subgraph reachable from the queried
+// content hash: ancestor edges (transformations that led to it) and
+// descendant edges (transformations applied to it or its derivatives).
+message QueryLineageResponse {
+  repeated ProvenanceNode ancestors   = 1;
+  repeated ProvenanceNode descendants = 2;
+  // True if a depth or size cap stopped the walk before it was exhausted.
+  bool truncated = 3;
 }

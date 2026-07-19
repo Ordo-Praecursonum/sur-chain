@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"math/big"
 
+	"cosmossdk.io/collections"
 	errorsmod "cosmossdk.io/errors"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -73,6 +74,14 @@ func (k msgServer) SubmitProvenanceNode(goCtx context.Context, msg *types.MsgSub
 	}
 	if err := k.ProvenanceNodes.Set(ctx, nodeID, node); err != nil {
 		return nil, errorsmod.Wrapf(err, "failed to store provenance node")
+	}
+	// Graph indexes: content -> touching edges, one per direction, so lineage
+	// queries are prefix scans instead of full-store walks.
+	if err := k.NodesByIn.Set(ctx, collections.Join(msg.ContentHashIn, nodeID)); err != nil {
+		return nil, errorsmod.Wrapf(err, "failed to index provenance node by input")
+	}
+	if err := k.NodesByOut.Set(ctx, collections.Join(msg.ContentHashOut, nodeID)); err != nil {
+		return nil, errorsmod.Wrapf(err, "failed to index provenance node by output")
 	}
 
 	ctx.EventManager().EmitEvent(sdk.NewEvent(
